@@ -1,5 +1,5 @@
 from controller import Robot
-
+import math
 # Initialize the robot
 robot = Robot()
 timestep = int(robot.getBasicTimeStep())
@@ -23,7 +23,11 @@ motor_left = robot.getDevice('wheel_left_joint')
 motor_right = robot.getDevice('wheel_right_joint')
 arm_1 = robot.getDevice('arm_1_joint')
 arm_2 = robot.getDevice('arm_2_joint')
+arm_3 = robot.getDevice('arm_3_joint')
 arm_4 = robot.getDevice('arm_4_joint')
+arm_5 = robot.getDevice('arm_5_joint')
+arm_6 = robot.getDevice('arm_6_joint')
+
 gps = robot.getDevice('gps')
 gps_ee = robot.getDevice('gps_ee')
 imu = robot.getDevice('inertial unit')
@@ -36,11 +40,15 @@ motor_right.setPosition(float('inf'))
 
 arm_1.setPosition(90.0*3.14159/180.0)
 arm_2.setPosition(45.0*3.14159/180.0)
-arm_4.setPosition(45.0*3.14159/180.0) # -15.0 or 45.0
+# arm_3.setPosition(90.0*3.14159/180.0)
+arm_4.setPosition(90.0*3.14159/180.0) # -15.0 or 45.0
+arm_5.setPosition(90.0*3.14159/180.0)
+# arm_6.setPosition(45*3.14159/180.0)
 
 gps.enable(timestep)
 gps_ee.enable(timestep)
 imu.enable(timestep)
+
 
 # Main loop:
 # - perform simulation steps until Webots is stopping the controller
@@ -52,10 +60,18 @@ while robot.step(timestep) != -1:
     robot.setCustomData(waypoints_string + ' ' + str(gps_ee_vals[0]) + ' ' + str(gps_ee_vals[1]))
     # end{please do not change}
 
-    print('Hello World from Python!', gps_vals, gps_ee_vals, [x*180.0/3.14159 for x in imu_rads])
-    motor_left.setVelocity(5.0)
-    motor_right.setVelocity(5.0)
-    if gps_ee_vals[0] > 4.5:
-        break
+    # arm_1.setPosition(90.0*3.14159/180.0)
+    # arm_2.setPosition(45.0*3.14159/180.0)
+    # arm_4.setPosition(45.0*3.14159/180.0) # -15.0 or 45.0
+
+    # print('Hello World from Python!', gps_vals, gps_ee_vals, [x*180.0/3.14159 for x in imu_rads])
+    p = [gps_vals[0] , gps_vals[1]]
+    q = [gps_ee_vals[0] , gps_ee_vals[1]]
+    print(gps_ee_vals , 'gps_ee')
+    print(math.dist(p,q) , 'distance between both gps ')
+    # motor_left.setVelocity(5.0)
+    # motor_right.setVelocity(5.0)
+    # if gps_ee_vals[0] > 4.5:
+    #     break
 
 print('Bye from Python!')
